@@ -1,0 +1,19 @@
+# Render Blueprint for SMS Launcher
+# Deploy with: render blueprint apply
+
+services:
+  - type: web
+    name: sms-launcher
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build && cd ../backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false  # Set manually in Render dashboard
+      - key: JWT_SECRET
+        generateValue: true  # Auto-generate secure secret
+    healthCheckPath: /api/health
