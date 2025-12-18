@@ -42,7 +42,13 @@ export const authAPI = {
       body: JSON.stringify({ email, password })
     }),
 
-  getMe: () => authFetch('/auth/me')
+  getMe: () => authFetch('/auth/me'),
+
+  updatePhone: (phoneNumber) =>
+    authFetch('/auth/phone', {
+      method: 'PUT',
+      body: JSON.stringify({ phoneNumber })
+    })
 };
 
 // Phones API

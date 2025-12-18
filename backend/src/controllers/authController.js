@@ -84,9 +84,31 @@ exports.getMe = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.json({ user: { id: user._id, email: user.email } });
+    res.json({ user: { id: user._id, email: user.email, phoneNumber: user.phoneNumber || '' } });
   } catch (error) {
     console.error('GetMe error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Update user phone number
+exports.updatePhone = async (req, res) => {
+  try {
+    const { phoneNumber } = req.body;
+    
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      { phoneNumber: phoneNumber?.trim() || '' },
+      { new: true }
+    ).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    res.json({ user: { id: user._id, email: user.email, phoneNumber: user.phoneNumber } });
+  } catch (error) {
+    console.error('UpdatePhone error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };
